@@ -1,0 +1,67 @@
+{% load staticfiles %}
+{% load embed_video_tags %}
+{% load app_filters %}
+
+<html>
+    <head>
+        <title>SDP SYSTEM</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/navbar-fixed-top/navbar-fixed-top.css' %}">
+	</head>
+
+    <body>
+
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="/">AB Credit (HK) SDP</a>
+	        </div>
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav">
+	          {% if request.user|has_group:"mygroup" %}
+	          	<li><a href="/view_users/">View Users</a></li>
+	          	{% endif %}
+	            <li><a href="/enroll/">Enrollment</a></li>
+	            <li {% if mode == 0 %}class="active"{% endif %}><a href="/mycourses/">My Courses</a></li>
+	            {% if perms.Enrollment.add_course %}
+				<li {% if mode == 1 %}class="active"{% endif %}><a href="/managecourses/">Manage Courses</a></li>
+				{% endif %}
+	            <li><a href="/logout/">Logout</a></li>
+	          </ul>
+	          	        </div><!--/.nav-collapse -->
+	      </div>
+	    </nav>
+
+	    <div class="container">
+	    {% if mode == 0 %}
+	    <a href="../">Back</a>
+	    {% else %}
+	    <a href="../../">Back</a>
+	    {% endif %}
+		    <h3>{{ course.name }} - {{ module.name }}</h3>
+		    <br>
+		    <h2>{{ component.name }}</h2>
+
+		    {% if component.component_type == 'VID' %}
+
+		    {% video component.video '1280x720' %}
+
+		    {% else %}
+
+   			{{ component.printContent |safe |linebreaks }}
+
+   			{% endif %}
+
+   		</div>
+
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    </body>
+</html>

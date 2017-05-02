@@ -1,0 +1,87 @@
+{% load staticfiles %}
+{% load app_filters %}
+
+<html>
+    <head>
+        <title>SDP SYSTEM</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/navbar-fixed-top/navbar-fixed-top.css' %}">
+		<script src="{% static 'js/table.js' %}"></script>
+	</head>
+
+    <body>
+
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="/">AB Credit (HK) SDP</a>
+	        </div>
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav">
+	          {% if request.user|has_group:"mygroup" %}
+	          	<li><a href="/view_users/">View Users</a></li>
+	          	{% endif %}
+	            <li><a href="/enroll/">Enrollment</a></li>
+	            <li class="active"><a href="/mycourses/">My Courses</a></li>
+	            {% if perms.Enrollment.add_course %}
+					<li><a href="/managecourses/">Manage Courses</a></li>
+				{% endif %}
+	            <li><a href="/logout/">Logout</a></li>
+	          </ul>
+	          	        </div><!--/.nav-collapse -->
+	      </div>
+	    </nav>
+
+	    <div class="container">
+	    	<div>
+	            <p>Welcome, {{request.user.first_name}}</p>
+	        </div>
+
+	        <div>
+	            <h1>Enrolled Courses List</h1>
+	        </div>
+
+	        <div  class="table-responsive-vertical shadow-z-1">
+		        <table id="table" class="table table-hover table-mc-light-blue">
+		        	<thead>
+			        	<tr>
+			        		<th>Course Code</th>
+			        		<th>Course Name</th>
+			        		<th>Instructor</th>
+			        		<th>Date of Enrollment</th>
+			        		<th>Course State</th>
+						</tr>
+					</thead>
+				<tbody>
+
+			        {% for enrollment in enrollments %}
+
+			        <tr>
+			        	<td data-title="Course Code">{{ enrollment.course.code }}</td>
+			        	<!--Link below should link to course module and materials later-->
+			        	<td data-title="Course Name"><a href="../course_modules/{{ enrollment.id }}">{{ enrollment.course.name }}</a></td>
+			        	<td data-title="Instructor">{{ enrollment.course.getInstructor }}</td>
+			        	<td data-title="date_enrollment">{{ enrollment.date_enrollment }}</td>
+			        	<td data-title="State">{% if enrollment.state == 'PR' %}In Progress{% else %}Completed on {{ enrollment.date_finish }}{% endif %}</td>
+			        	{% if enrollment.state == 'PR' %}<td data-title="Drop" ><a href="../course_modules/{{ enrollment.id }}/drop/"  style="color:red;">Drop Course</a></td>{% endif %}
+			        </tr>
+
+					{% endfor %}
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'js/jquery-3.1.1.min' %}"></script>
+
+    </body>
+</html>

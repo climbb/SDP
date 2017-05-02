@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+
+  		<link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		<link rel="stylesheet" href="{% static 'login/css/style.css' %}">
+        <title>AB Credit (HK) SDP |
+        {% block title %}{% endblock %}</title>
+    </head>
+    <body>
+        <h1>{% block head %}{% endblock %}</h1>
+        {% block content %}{% endblock %}
+ <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </body>
+
+</html>
